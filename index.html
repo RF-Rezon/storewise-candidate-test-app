@@ -11,47 +11,69 @@
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
-
   <body>
     <div id="mydiv"></div>
 
     <script type="text/babel">
-      const allData = Array.from({ length: 40 }, () =>
-        Math.floor(Math.random() * 40)
-      );
-
       function App() {
-        const [currentList, setCurrentList] = React.useState(allData);
+        const [currentList, setCurrentList] = React.useState([]);
+        const [sorted, setSorted] = React.useState(false);
+        const [filtered, setFiltered] = React.useState(false);
 
-        const SortFunction = () => {
-          const SortedArray = currentList.sort(function (a, b) {
-            return a - b;
-          });
+        React.useEffect(() => {
+          const allData = Array.from({ length: 40 }, () =>
+            Math.floor(Math.random() * 40)
+          );
+          setCurrentList(allData);
+        }, []);
 
-          setCurrentList([...SortedArray]);
+        const handleShort = () => {
+          const sortedValue = currentList.sort((small, big) => big - small);
+          setCurrentList([...sortedValue]);
+          setSorted(true);
+          setTimeout(() => {
+            setSorted(false);
+          }, 3000);
         };
-
-        const FilterOddFunction = () => {
-          const FilteredArray = currentList.filter((ele) => ele % 2 === 1);
-          setCurrentList(FilteredArray);
+        const handleFilter = () => {
+          const filteredValue = currentList.filter((num) => num % 2 !== 0);
+          setCurrentList(filteredValue);
+          setSorted(false);
+          setFiltered(true);
+          setTimeout(() => {
+            setFiltered(false);
+          }, 4000);
         };
-
         return (
           <>
             <div style={{ display: "flex" }}>
               <button
-                onClick={() => SortFunction(currentList)}
+                onClick={handleShort}
                 style={{ width: "100px", height: "100px" }}
               >
                 Sort
               </button>
               <button
-                onClick={() => FilterOddFunction(currentList)}
+                onClick={handleFilter}
                 style={{ width: "100px", height: "100px" }}
               >
                 Filter Odd Numbers
               </button>
             </div>
+            {sorted && (
+              <div>
+                <p style={{ font: "bold", padding: "8px 16px" }}>
+                  Sorted in Descending Order
+                </p>
+              </div>
+            )}
+            {filtered && (
+              <div>
+                <p style={{ font: "bold", padding: "8px 16px" }}>
+                  Filtered. Showing the odd numbers only.
+                </p>
+              </div>
+            )}
             {currentList.map((item, index) => (
               <div key={index}> {item.toString()} </div>
             ))}
