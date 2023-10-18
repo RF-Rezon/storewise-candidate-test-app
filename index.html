@@ -11,6 +11,7 @@
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
+
   <body>
     <div id="mydiv"></div>
 
@@ -18,13 +19,36 @@
       const allData = Array.from({ length: 40 }, () =>
         Math.floor(Math.random() * 40)
       );
+
       function App() {
         const [currentList, setCurrentList] = React.useState(allData);
+
+        const SortFunction = () => {
+          const SortedArray = currentList.sort(function (a, b) {
+            return a - b;
+          });
+
+          setCurrentList([...SortedArray]);
+        };
+
+        const FilterOddFunction = () => {
+          const FilteredArray = currentList.filter((ele) => ele % 2 === 1);
+          setCurrentList(FilteredArray);
+        };
+
         return (
           <>
             <div style={{ display: "flex" }}>
-              <button style={{ width: "100px", height: "100px" }}>Sort</button>
-              <button style={{ width: "100px", height: "100px" }}>
+              <button
+                onClick={() => SortFunction(currentList)}
+                style={{ width: "100px", height: "100px" }}
+              >
+                Sort
+              </button>
+              <button
+                onClick={() => FilterOddFunction(currentList)}
+                style={{ width: "100px", height: "100px" }}
+              >
                 Filter Odd Numbers
               </button>
             </div>
